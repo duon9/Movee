@@ -12,4 +12,11 @@ class Member(models.Model):
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"
+    
+class Movie(models.Model):
+    title = models.CharField(max_length= 255, null= False, unique= True)
+    description = models.CharField(max_length=255, null = True, unique= False)
+    source = models.CharField(max_length=255, null= True)
+    image_src = models.CharField(max_length=255, null= True)
+
 

@@ -19,30 +19,31 @@
     <div class="row">
         <div class="col-md-4 animate__animated animate__zoomIn">
             <div class="card">
-                <img src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/817933896DE0A85F265166E37F2B7426A8FC2F4CED5E9AAF8B3F97380B25A11F/scale?width=506&amp;aspectRatio=2.00&amp;format=webp" class="card-img-top" alt="Film 1">
+                <img src="{{movies.0.image_src}}" class="card-img-top" alt="Film 1">
                 <div class="card-body">
-                    <h5 class="card-title">The Boys</h5>
-                    <p class="card-text">A brief description of the film goes here.</p>
+                    <h5 class="card-title">{{movies.0.title}}</h5>
+                    <p class="card-text">{{movies.0.description}}</p>
                     <a href="#" class="btn btn-primary">Watch Now</a>
                 </div>
             </div>
         </div>
+        
         <div class="col-md-4 animate__animated animate__zoomIn animate__delay-1s">
             <div class="card">
-                <img src="https://ew.com/thmb/mXhjY5AMAiISzLp9-mWQz-p7JQM=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/The-Boys-Season-4-key-art-022224-1-814254360d0548d0b36e878db8f17367.jpg" class="card-img-top" alt="Film 2">
+                <img src="{{movies.1.image_src}}" class="card-img-top" alt="Film 2">
                 <div class="card-body">
-                    <h5 class="card-title">The Nun</h5>
-                    <p class="card-text">A brief description of the film goes here.</p>
+                    <h5 class="card-title">{{movies.1.title}}</h5>
+                    <p class="card-text">{{movies.1.description}}</p>
                     <a href="#" class="btn btn-primary">Watch Now</a>
                 </div>
             </div>
         </div>
         <div class="col-md-4 animate__animated animate__zoomIn animate__delay-2s">
             <div class="card">
-                <img src="https://resizing.flixster.com/SFfLVmXdiFhntYdVoYo2hyBJn9U=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvMzRiYTc0NzUtZjJhNS00ZTlhLWI4ODMtY2MxNWNjMWU1ZjJmLmpwZw==" class="card-img-top" alt="Film 3">
+                <img src="{{movies.2.image_src}}" class="card-img-top" alt="Film 3">
                 <div class="card-body">
-                    <h5 class="card-title">Arcane</h5>
-                    <p class="card-text">A brief description of the film goes here.</p>
+                    <h5 class="card-title">{{movies.2.title}}</h5>
+                    <p class="card-text">{{movies.2.description}}</p>
                     <a href="#" class="btn btn-primary">Watch Now</a>
                 </div>
             </div>

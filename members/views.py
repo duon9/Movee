@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
-from .models import Member
+from .models import Member, Movie
 
 # Create your views here.
 
@@ -16,9 +16,10 @@ def members(request):
   return HttpResponse(template.render(context, request))
 
 def home(request):
+    mymovies = Movie.objects.all().order_by('-id')[:3].values()
     template = loader.get_template("home.html")
     context = {
-        
+        'movies' : mymovies
     }
     return HttpResponse(template.render(context, request))
 
