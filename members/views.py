@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, HttpResponseNotFound
 from django.template import loader
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -45,10 +45,11 @@ def register(request):
    }
    return HttpResponse(template.render(context, request))
 
-def player(request):
+def player(request, id):
    template = loader.get_template("player.html")
+   mymovie = get_object_or_404(Movie, id=id)
    context = {
-      
+      "movie" : mymovie
    }
    return HttpResponse(template.render(context, request))
 
