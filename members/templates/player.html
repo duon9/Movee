@@ -1,60 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{movie.title}}</title>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet">
-</head>
-<body>
+{% extends "master.html" %}
+{% block Title %} {{ movie.title }} {% endblock %}
 
-  <!-- Navigation Bar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Movee</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Movies</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Series</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- Film Watch Container -->
-  <div class="container mt-5">
+{% block content %}
+<!-- Film Watch Container -->
+<div class="container mt-5">
     <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <video id="video" class="video-js vjs-default-skin" controls preload="auto" width="600" height="400" data-setup="{}">
-          <source src="{{movie.source}}" type="video/mp4">
-        </video>
-        <h2 class="mt-4">{{movie.title}}</h2>
-        <p class="lead">{{movie.description}}</p>
-      </div>
+        <!-- Player Section -->
+        <div class="col-lg-8 col-md-12">
+            <div class="embed-responsive embed-responsive-16by9">
+                <video id="video" class="embed-responsive-item video-js vjs-default-skin" controls preload="auto" data-setup="{}">
+                    <source src="{{ movie.source }}" type="video/mp4">
+                </video>
+            </div>
+            <h2 class="mt-4">{{ movie.title }}</h2>
+            <p class="lead">{{ movie.description }}</p>
+        </div>
+        <!-- Suggested Movies Section -->
+        <div class="col-lg-4 col-md-12">
+            <h3>Suggested Movies</h3>
+            <div class="row">
+                {% for suggested_movie in suggested_movies %}
+                <div class="col-md-12 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ suggested_movie.image_src }}" class="card-img-top" alt="{{ suggested_movie.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ suggested_movie.title }}</h5>
+                            <p class="card-text">{{ suggested_movie.description|truncatewords:20 }}</p>
+                            <a href="{% url 'player' suggested_movie.id %}" class="btn btn-primary">Watch Now</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="bg-dark text-white text-center py-3 mt-5">
-    <p>&copy; 2024 Movee. All rights reserved.</p>
-  </footer>
-
-  <!-- Bootstrap JS and dependencies -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="https://vjs.zencdn.net/7.11.4/video.min.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}
