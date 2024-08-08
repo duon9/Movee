@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound
 from django.template import loader
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login as auth_login
 from django.core.paginator import Paginator
 from .models import Member, Movie
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password
+
+
 
 # Create your views here.
 
@@ -33,7 +37,7 @@ def detail(request, id):
    return HttpResponse(template.render(context, request))
 
 def login(request):
-   template = loader.get_template("login.html")
+   template = loader.get_template("login_and_register.html")
    context = {
       
    }
@@ -65,4 +69,52 @@ def movies(request):
    page_obj = paginator.get_page(page_number)
    context ={'page_obj' : page_obj}
    return HttpResponse(template.render(context, request))
+
+def signin(request):
+   if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Authenticate the user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Log the user in
+            auth_login(request, user)
+            messages.success(request, 'Login successful!')
+            return redirect('home')  # Redirect to a home page or any other page
+        else:
+            messages.error(request, 'Invalid username or password.')
+            return redirect('signin')
+
+   return render(request, 'signin.html')
+
+
+def signup(request):
+   if request.method == 'POST':
+        username = request.POST.get('username')
+
+        if Member.objects.filter(username=username).exists():
+           messages.error(request, 'Username already exists')
+           return redirect('signup')
+
+        email = request.POST.get('email')
+        password = request.POST.get('password1')
+        confirm_password = request.POST.get('password2')
+
+        if password != confirm_password:
+            messages.error(request, 'Passwords do not match')
+            return redirect('signup')
+
+
+        phone = request.POST.get('phone')
+        firstname = request.POST.get('firstname')
+        lastname = request.POST.get('lastname')
+
+        hashed_password = make_password(password)
+
+        member = Member(username=username, email=email, password=hashed_password, phone = phone, firstname = firstname, lastname = lastname)
+        member.save()
+        return redirect('home')
+   return render(request, "signup.html")
 
