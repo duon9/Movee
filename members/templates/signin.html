@@ -15,7 +15,7 @@
 
 
 
-<!-- {% if messages %}
+{% if messages %}
 <div class="messages">
     {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">
@@ -23,18 +23,18 @@
         </div>
     {% endfor %}
 </div>
-{% endif %} -->
+{% endif %}
 
 {% block content %}
 <div class="form-container">
     <!-- Login Form -->
     <div id="loginForm" class="card p-4">
-        <h3 class="text-center">Login</h3>
+        <h3 class="text-center">Sign In</h3>
         <form method="post">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="loginUsername" class="form-label">Username</label>
-                <input type="username" class="form-control" id="loginEmail" name="username" placeholder="Enter username" required>
+                <input type="text" class="form-control" id="loginUsername" name="username" placeholder="Username" required>
             </div>
             <div class="mb-3">
                 <label for="loginPassword" class="form-label">Password</label>
