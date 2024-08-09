@@ -11,24 +11,11 @@
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://vjs.zencdn.net/7.11.4/video-js.css" rel="stylesheet">
-    <style>
-        .card {
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+    {% block css %}
+    {% endblock %}
 
-        .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .card-img-top {
-            transition: filter 0.3s;
-        }
-
-        .card:hover .card-img-top {
-            filter: blur(0px);
-        }
-    </style>
+    {% block js %}
+    {% endblock %}
 </head>
 <body>
 
@@ -52,9 +39,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Contact</a>
             </li>
+            {% if not user.is_authenticated %}
             <li class="nav-item">
-                <a class="btn btn-outline-primary" href="/signin">Login</a>
+                <a class="btn btn-outline-primary" href="{% url 'signin' %}?next={{request.path}}">Login</a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

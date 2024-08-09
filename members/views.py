@@ -7,11 +7,12 @@ from django.core.paginator import Paginator
 from .models import Member, Movie
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import logout
 
 
 
 # Create your views here.
-
+@login_required(redirect_field_name='next', login_url='/signin')
 def members(request):
   mymembers = Member.objects.all().values()
   template = loader.get_template('members.html')
@@ -28,6 +29,7 @@ def home(request):
     }
     return HttpResponse(template.render(context, request))
 
+@login_required(redirect_field_name='next', login_url='/signin')
 def detail(request, id):
    mymember = Member.objects.get(id=id)
    template = loader.get_template("detail.html")
@@ -36,20 +38,7 @@ def detail(request, id):
     }
    return HttpResponse(template.render(context, request))
 
-def login(request):
-   template = loader.get_template("login_and_register.html")
-   context = {
-      
-   }
-   return HttpResponse(template.render(context, request))
-
-def register(request):
-   template = loader.get_template("register.html")
-   context = {
-      
-   }
-   return HttpResponse(template.render(context, request))
-
+@login_required(redirect_field_name='next', login_url='/signin')
 def player(request, id):
    template = loader.get_template("player.html")
    mymovie = get_object_or_404(Movie, id=id)
@@ -60,6 +49,7 @@ def player(request, id):
    }
    return HttpResponse(template.render(context, request))
 
+@login_required(redirect_field_name='next', login_url='/signin')
 def movies(request):
    movies_list = Movie.objects.all()
    template = loader.get_template("movies.html")
@@ -71,23 +61,37 @@ def movies(request):
    return HttpResponse(template.render(context, request))
 
 def signin(request):
+
+   if (request.GET.get('next') != None):
+         next_url = request.GET.get('next')
+         print(next_url)
+   else:
+         print("home")
+         next_url = 'home'
+
    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Authenticate the user
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            # Log the user in
             auth_login(request, user)
             messages.success(request, 'Login successful!')
-            return redirect('home')  # Redirect to a home page or any other page
+            # next_url = ""
+            # if (request.GET.get('?next') != None):
+            #     next_url = request.GET.get('next')
+            #     print(next_url)
+            # else:
+            #     print("home")
+            #     next_url = 'home'
+            return redirect(next_url)  # Redirect to a home page or any other page
         else:
             messages.error(request, 'Invalid username or password.')
             return redirect('signin')
 
-   return render(request, 'signin.html')
+   next_url = request.GET.get('next', '')
+   return render(request, 'signin.html', {'next': next_url})
 
 
 def signup(request):
@@ -117,4 +121,9 @@ def signup(request):
         member.save()
         return redirect('home')
    return render(request, "signup.html")
+
+@login_required(redirect_field_name='next', login_url='/signin')
+def mlogout(request):
+    logout(request)
+    return redirect('home')
 

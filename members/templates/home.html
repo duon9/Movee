@@ -1,6 +1,28 @@
 {% extends "master.html" %}
 {% block Title %} A place for film {% endblock %}
 
+
+{% block css %}
+<style>
+    .card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+        transition: filter 0.3s;
+    }
+
+    .card:hover .card-img-top {
+        filter: blur(0px);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Jumbotron -->
 <div class="jumbotron jumbotron-fluid animate__animated animate__fadeIn">
