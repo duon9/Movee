@@ -12,6 +12,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import logout
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from .utils import is_password_strong
 
 
 
@@ -126,6 +127,9 @@ def signup(request):
         if Member.objects.filter(username=username).exists():
             messages.error(request, 'Username already exists.')
             return redirect('signup')
+        if len(username) < 7 or len(username) > 32:
+            messages.error(request, 'Username must be in range of 6 to 32 characters')
+            return redirect('signup')
 
         # Validate email format
         try:
@@ -138,7 +142,9 @@ def signup(request):
         if password != confirm_password:
             messages.error(request, 'Passwords do not match.')
             return redirect('signup')
-
+        if (not is_password_strong(password)):
+            messages.error(request, "Your password is too weak. Make sure it is at least 8 characters long and includes special characters, uppercase, and lowercase letters.")
+            return redirect('signup')
         # Create and save the new member
         member = Member(
             username=username,
