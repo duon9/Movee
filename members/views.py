@@ -51,14 +51,22 @@ def player(request, id):
 
 @login_required(redirect_field_name='next', login_url='/signin')
 def movies(request):
-   movies_list = Movie.objects.all()
-   template = loader.get_template("movies.html")
-   paginator = Paginator(movies_list, 10)
+    query = request.GET.get('q')
+    if query:
+        movies_list = Movie.objects.filter(title__icontains=query)
+    else:
+        movies_list = Movie.objects.all().order_by('-id')
 
-   page_number = request.GET.get('page')
-   page_obj = paginator.get_page(page_number)
-   context ={'page_obj' : page_obj}
-   return HttpResponse(template.render(context, request))
+    paginator = Paginator(movies_list, 12)  # Show 12 movies per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    template = loader.get_template("movies.html")
+    context = {
+        'page_obj': page_obj,
+        'query': query,  # Pass the query to the template
+    }
+    return HttpResponse(template.render(context, request))
 
 def signin(request):
 
