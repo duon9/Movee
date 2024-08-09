@@ -85,31 +85,31 @@ def movies(request):
    return HttpResponse(template.render(context, request))
 
 def signin(request):
-    next_url = request.GET.get('next')
-    if next_url:
-        # Store 'next' in the session
-        request.session['next_url'] = next_url
-    else:
-        # If no 'next' parameter, default to home or any other page
-        request.session['next_url'] = 'home'
+   next_url = request.GET.get('next')
+   if (request.GET.get('next') != None):
+         next_url = request.GET.get('next')
+         print(next_url)
+   else:
+         print("home")
+         next_url = 'home'
 
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+   if request.method == 'POST':
+      username = request.POST.get('username')
+      password = request.POST.get('password')
 
-        try:
-            member = Member.objects.get(username=username)
-            if member.check_password(password):
-                # Log the user in
-                request.session['member_id'] = member.id
-                messages.success(request, 'Login successful!')
-                return redirect(next_url)
-            else:
-                messages.error(request, 'Invalid username or password.')
-        except Member.DoesNotExist:
-            messages.error(request, 'Invalid username or password.')
+      try:
+         member = Member.objects.get(username=username)
+         if member.check_password(password):
+               # Log the user in
+               request.session['member_id'] = member.id
+               messages.success(request, 'Login successful!')
+               return redirect(next_url)
+         else:
+               messages.error(request, 'Invalid username or password.')
+      except Member.DoesNotExist:
+         messages.error(request, 'Invalid username or password.')
 
-    return render(request, 'signin.html', {'next': next_url})
+   return render(request, 'signin.html', {'next': next_url})
 
 
 def signup(request):
